@@ -1,5 +1,105 @@
+export interface QueryToRecordOptions {
+  camel?: boolean
+  capital?: boolean
+  filter?: string[]
+  stringify?: boolean
+}
+
 export class QueryToRecord {
-  apiRecord(
+  record(
+    query: Record<string, any>,
+    options: QueryToRecordOptions = {}
+  ):
+    | Record<string, any>
+    | [Record<string, any>, Record<string, any>] {
+    const { camel, capital, filter, stringify } = options
+    const record = this.objectify(query)
+
+    let data = capital ? this.capKeys(record) : record
+
+    data = camel ? this.camelKeys(record) : data
+
+    if (stringify) {
+      data = this.stringify(data)
+    }
+
+    if (filter) {
+      return this.filter(filter, data)
+    }
+
+    return data
+  }
+
+  camelKeys(
+    record: Record<string, any>
+  ): Record<string, any> {
+    const data = {}
+
+    for (const key in record) {
+      if (this.isObject(record[key])) {
+        data[this.camelKey(key)] = this.camelKeys(
+          record[key]
+        )
+      } else {
+        data[this.camelKey(key)] = record[key]
+      }
+    }
+
+    return data
+  }
+
+  camelKey(key: string): string {
+    return key.replace(/^\w/, c => c.toLowerCase())
+  }
+
+  capKeys(
+    record: Record<string, any>
+  ): Record<string, any> {
+    const data = {}
+
+    for (const key in record) {
+      if (this.isObject(record[key])) {
+        data[this.capKey(key)] = this.capKeys(record[key])
+      } else {
+        data[this.capKey(key)] = record[key]
+      }
+    }
+
+    return data
+  }
+
+  capKey(key: string): string {
+    return key.replace(/^\w/, c => c.toUpperCase())
+  }
+
+  isObject(value: any): boolean {
+    return (
+      typeof value === "object" && !(value instanceof Date)
+    )
+  }
+
+  filter(
+    columns: string[],
+    query: Record<string, any>
+  ): [Record<string, any>, Record<string, any>] {
+    const og = {}
+    const extras = {}
+
+    for (const key in query) {
+      const match = columns.find(
+        col => col.toLowerCase() === key.toLowerCase()
+      )
+      if (match) {
+        og[key] = query[key]
+      } else {
+        extras[key] = query[key]
+      }
+    }
+
+    return [og, extras]
+  }
+
+  objectify(
     query: Record<string, any>
   ): Record<string, any> {
     const data = {}
@@ -28,65 +128,18 @@ export class QueryToRecord {
     return data
   }
 
-  bigQueryRecord(
-    query: Record<string, any>
-  ): Record<string, any> {
-    const record = this.apiRecord(query)
-    const data = this.camelKeys(record)
-
-    for (const key in data) {
-      if (
-        typeof data[key] === "object" &&
-        !(data[key] instanceof Date)
-      ) {
-        data[key] = JSON.stringify(data[key])
-      }
-    }
-
-    return data
-  }
-
-  camelKeys(
+  stringify(
     record: Record<string, any>
   ): Record<string, any> {
     const data = {}
-
     for (const key in record) {
-      if (
-        typeof record[key] === "object" &&
-        !(record[key] instanceof Date)
-      ) {
-        data[this.jsonKey(key)] = this.camelKeys(
-          record[key]
-        )
+      if (this.isObject(record[key])) {
+        data[key] = JSON.stringify(record[key])
       } else {
-        data[this.jsonKey(key)] = record[key]
+        data[key] = record[key]
       }
     }
-
     return data
-  }
-
-  filter(
-    columns: string[],
-    query: Record<string, any>
-  ): [Record<string, any>, Record<string, any>] {
-    const og = {}
-    const extras = {}
-
-    for (const col in query) {
-      if (columns.includes(col)) {
-        og[col] = query[col]
-      } else {
-        extras[col] = query[col]
-      }
-    }
-
-    return [og, extras]
-  }
-
-  jsonKey(key: string): string {
-    return key.replace(/^\w/, c => c.toLowerCase())
   }
 }
 
