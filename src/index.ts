@@ -1,6 +1,6 @@
 export class QueryToRecord {
   apiRecord(
-    query: Record<string, string>
+    query: Record<string, any>
   ): Record<string, any> {
     const data = {}
 
@@ -29,7 +29,7 @@ export class QueryToRecord {
   }
 
   bigQueryRecord(
-    query: Record<string, string>
+    query: Record<string, any>
   ): Record<string, any> {
     const record = this.apiRecord(query)
     const data = this.camelKeys(record)
