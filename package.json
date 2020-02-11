@@ -1,0 +1,58 @@
+{
+  "name": "@winton/query-to-record",
+  "version": "0.0.1",
+  "description": "Turns flattened query data into records",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "./bin/build",
+    "release": "./bin/release",
+    "test": "mocha",
+    "update": "ncu -u",
+    "watch": "tsc -b -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/winton/query-to-record.git"
+  },
+  "author": "Winton Welsh <mail@wintoni.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/winton/query-to-record/issues"
+  },
+  "homepage": "https://github.com/winton/query-to-record#readme",
+  "devDependencies": {
+    "@types/mocha": "7.0.1",
+    "@types/node": "13.7.0",
+    "@typescript-eslint/eslint-plugin": "2.19.2",
+    "@typescript-eslint/parser": "2.19.2",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "expect": "25.1.0",
+    "husky": "4.2.1",
+    "lint-staged": "10.0.7",
+    "mocha": "7.0.1",
+    "npm-check-updates": "4.0.1",
+    "prettier": "1.19.1",
+    "release-it": "12.4.3",
+    "semver": "7.1.2",
+    "ts-node": "8.6.2",
+    "typescript": "3.7.5"
+  },
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm test"
+    }
+  },
+  "lint-staged": {
+    "*.{css,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,jsx,ts}": [
+      "eslint --ignore-path .gitignore --fix",
+      "git add"
+    ]
+  }
+}
