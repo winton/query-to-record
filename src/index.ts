@@ -67,19 +67,22 @@ export class QueryToRecord {
     return data
   }
 
-  extras(
+  filter(
     columns: string[],
     query: Record<string, any>
-  ): Record<string, any> {
+  ): [Record<string, any>, Record<string, any>] {
+    const og = {}
     const extras = {}
 
     for (const col in query) {
-      if (!columns.includes(col)) {
+      if (columns.includes(col)) {
+        og[col] = query[col]
+      } else {
         extras[col] = query[col]
       }
     }
 
-    return extras
+    return [og, extras]
   }
 
   jsonKey(key: string): string {
