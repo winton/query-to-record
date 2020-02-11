@@ -9,9 +9,7 @@ export class QueryToRecord {
   record(
     query: Record<string, any>,
     options: QueryToRecordOptions = {}
-  ):
-    | Record<string, any>
-    | [Record<string, any>, Record<string, any>] {
+  ): Record<string, any> {
     const { camel, capital, filter, stringify } = options
     const record = this.objectify(query)
 
@@ -81,8 +79,8 @@ export class QueryToRecord {
   filter(
     columns: string[],
     query: Record<string, any>
-  ): [Record<string, any>, Record<string, any>] {
-    const og = {}
+  ): Record<string, any> {
+    const record = {}
     const extras = {}
 
     for (const key in query) {
@@ -90,13 +88,13 @@ export class QueryToRecord {
         col => col.toLowerCase() === key.toLowerCase()
       )
       if (match) {
-        og[key] = query[key]
+        record[key] = query[key]
       } else {
         extras[key] = query[key]
       }
     }
 
-    return [og, extras]
+    return { record, extras }
   }
 
   objectify(

@@ -29,16 +29,16 @@ describe("queryToRecord", () => {
         filter: ["Address", "Demographic"],
         stringify: true,
       })
-    ).toEqual([
-      {
+    ).toEqual({
+      record: {
         address: "win@sent.com",
         demographic: '{"appVersion":"1.0"}',
       },
-      {
+      extras: {
         user: '{"userAttributes":{"gender":"m"}}',
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       },
-    ])
+    })
   })
 })
