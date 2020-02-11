@@ -70,6 +70,22 @@ export class QueryToRecord {
     return key.replace(/^\w/, c => c.toUpperCase())
   }
 
+  convertToArrays(
+    attr: Record<string, any>
+  ): Record<string, any> {
+    const data = {}
+    if (attr) {
+      for (const key in attr) {
+        if (Array.isArray(attr[key])) {
+          data[key] = attr[key]
+        } else {
+          data[key] = [attr[key]]
+        }
+      }
+    }
+    return data
+  }
+
   isObject(value: any): boolean {
     return (
       typeof value === "object" && !(value instanceof Date)
