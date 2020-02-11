@@ -113,7 +113,7 @@ export class QueryToRecord {
 
           if (
             (attr.match(/Timestamp/) || attr.match(/At/)) &&
-            typeof memo[attr] === "string"
+            ["number", "string"].includes(typeof memo[attr])
           ) {
             memo[attr] = new Date(memo[attr])
           }
