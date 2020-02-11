@@ -30,6 +30,11 @@ export class QueryToRecord {
     for (const key in data) {
       if (typeof data[key] === "object") {
         data[key] = JSON.stringify(data[key])
+      } else if (
+        (key.match(/Timestamp/) || key.match(/At/)) &&
+        typeof data[key] === "string"
+      ) {
+        data[key] = new Date(data[key])
       }
     }
 
