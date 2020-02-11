@@ -1,7 +1,7 @@
 {
-  "name": "@winton/query-to-record",
+  "name": "query-to-record",
   "version": "0.0.1",
-  "description": "Turns flattened query data into records",
+  "description": "Turns flattened query data into records 🚜",
   "main": "dist/index.js",
   "scripts": {
     "build": "./bin/build",
