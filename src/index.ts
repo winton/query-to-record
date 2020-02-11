@@ -12,6 +12,13 @@ export class QueryToRecord {
 
         if (index === attrs.length - 1) {
           memo[attr] = query[key]
+
+          if (
+            (attr.match(/Timestamp/) || attr.match(/At/)) &&
+            typeof memo[attr] === "string"
+          ) {
+            memo[attr] = new Date(memo[attr])
+          }
         }
 
         return memo[attr]
@@ -28,13 +35,11 @@ export class QueryToRecord {
     const data = this.camelKeys(record)
 
     for (const key in data) {
-      if (typeof data[key] === "object") {
-        data[key] = JSON.stringify(data[key])
-      } else if (
-        (key.match(/Timestamp/) || key.match(/At/)) &&
-        typeof data[key] === "string"
+      if (
+        typeof data[key] === "object" &&
+        !(data[key] instanceof Date)
       ) {
-        data[key] = new Date(data[key])
+        data[key] = JSON.stringify(data[key])
       }
     }
 
@@ -47,7 +52,10 @@ export class QueryToRecord {
     const data = {}
 
     for (const key in record) {
-      if (typeof record[key] === "object") {
+      if (
+        typeof record[key] === "object" &&
+        !(record[key] instanceof Date)
+      ) {
         data[this.jsonKey(key)] = this.camelKeys(
           record[key]
         )

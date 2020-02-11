@@ -5,6 +5,7 @@ const fixture = {
   Address: "win@sent.com",
   "Demographic.AppVersion": "1.0",
   "User.UserAttributes.gender": "m",
+  CreatedAt: new Date().toString(),
 }
 
 describe("PinpointEndpoint", () => {
@@ -13,6 +14,7 @@ describe("PinpointEndpoint", () => {
       Address: "win@sent.com",
       Demographic: { AppVersion: "1.0" },
       User: { UserAttributes: { gender: "m" } },
+      CreatedAt: expect.any(Date),
     })
   })
 
@@ -21,6 +23,7 @@ describe("PinpointEndpoint", () => {
       address: "win@sent.com",
       demographic: '{"appVersion":"1.0"}',
       user: '{"userAttributes":{"gender":"m"}}',
+      createdAt: expect.any(Date),
     })
   })
 })
