@@ -34,11 +34,9 @@ describe("queryToRecord", () => {
         address: "win@sent.com",
         demographic: '{"appVersion":"1.0"}',
       },
-      extras: {
-        user: '{"userAttributes":{"gender":"m"}}',
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
+      extras: expect.stringContaining(
+        '{"user":{"userAttributes":{"gender":"m"}}'
+      ),
     })
   })
 })

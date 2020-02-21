@@ -17,12 +17,22 @@ export class QueryToRecord {
 
     data = camel ? this.camelKeys(record) : data
 
-    if (stringify) {
-      data = this.stringify(data)
+    if (filter) {
+      let { record, extras } = this.filter(filter, data)
+
+      if (stringify) {
+        record = this.stringify(record)
+
+        if (this.isObject(extras)) {
+          extras = JSON.stringify(extras)
+        }
+      }
+
+      return { record, extras }
     }
 
-    if (filter) {
-      return this.filter(filter, data)
+    if (stringify) {
+      data = this.stringify(data)
     }
 
     return data
