@@ -39,7 +39,9 @@
     "ts-node": "8.6.2",
     "typescript": "3.7.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dot-prop": "5.2.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged && npm test"

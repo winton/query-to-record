@@ -1,3 +1,5 @@
+import dotProp from "dot-prop"
+
 export interface QueryToRecordOptions {
   camel?: boolean
   capital?: boolean
@@ -109,13 +111,18 @@ export class QueryToRecord {
     const record = {}
     const extras = {}
 
+    for (const col of columns) {
+      const value = dotProp.get(query, col)
+      const lastCol = col.match(/[^.]+$/)[0]
+
+      if (value) {
+        record[lastCol] = value
+        dotProp.delete(query, col)
+      }
+    }
+
     for (const key in query) {
-      const match = columns.find(
-        col => col.toLowerCase() === key.toLowerCase()
-      )
-      if (match) {
-        record[key] = query[key]
-      } else {
+      if (!record[key]) {
         extras[key] = query[key]
       }
     }
