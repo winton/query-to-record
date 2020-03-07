@@ -33,6 +33,7 @@ describe("queryToRecord", () => {
           "address",
           "demographic",
           "user.userAttributes.source",
+          "doesntExist",
         ],
         stringify: true,
       })
