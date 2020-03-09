@@ -5,7 +5,7 @@ const fixture = {
   address: "win@sent.com",
   "Demographic.appVersion": "1.0",
   "user.userAttributes.Gender": "m",
-  "user.userAttributes.Source": "onsite",
+  "user.UserAttributes.source_utm": "onsite",
   CreatedAt: new Date().toString(),
   updatedAt: new Date(),
 }
@@ -18,7 +18,10 @@ describe("queryToRecord", () => {
       Address: "win@sent.com",
       Demographic: { AppVersion: "1.0" },
       User: {
-        UserAttributes: { Gender: "m", Source: "onsite" },
+        UserAttributes: {
+          Gender: "m",
+          SourceUtm: "onsite",
+        },
       },
       CreatedAt: expect.any(Date),
       UpdatedAt: expect.any(Date),
@@ -32,7 +35,7 @@ describe("queryToRecord", () => {
         filter: [
           "address",
           "demographic",
-          "user.userAttributes.source",
+          "user.userAttributes.sourceUtm",
           "doesntExist",
         ],
         stringify: true,
@@ -41,7 +44,7 @@ describe("queryToRecord", () => {
       record: {
         address: "win@sent.com",
         demographic: '{"appVersion":"1.0"}',
-        source: "onsite",
+        sourceUtm: "onsite",
       },
       extras: expect.stringContaining(
         '{"user":{"userAttributes":{"gender":"m"}}'

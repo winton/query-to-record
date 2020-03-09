@@ -13,14 +13,17 @@ export class QueryToRecord {
     options: QueryToRecordOptions = {}
   ): Record<string, any> {
     const { camel, capital, filter, stringify } = options
-    const record = this.objectify(query)
 
-    let data = capital ? this.capKeys(record) : record
-
-    data = camel ? this.camelKeys(record) : data
+    let data = capital ? this.capKeys(query) : query
+    data = camel ? this.camelKeys(query) : data
+    data = this.objectify(data)
 
     if (filter) {
-      let { record, extras } = this.filter(filter, data)
+      let { record, extras } = this.filter(
+        filter,
+        data,
+        options
+      )
 
       if (stringify) {
         record = this.stringify(record)
@@ -59,7 +62,10 @@ export class QueryToRecord {
   }
 
   camelKey(key: string): string {
-    return key.replace(/^\w/, c => c.toLowerCase())
+    return key
+      .replace(/^\w/, c => c.toLowerCase())
+      .replace(/\.\w/g, c => c.toLowerCase())
+      .replace(/[-_]\w/g, c => c.slice(1).toUpperCase())
   }
 
   capKeys(
@@ -79,7 +85,10 @@ export class QueryToRecord {
   }
 
   capKey(key: string): string {
-    return key.replace(/^\w/, c => c.toUpperCase())
+    return key
+      .replace(/^\w/, c => c.toUpperCase())
+      .replace(/\.\w/g, c => c.toUpperCase())
+      .replace(/[-_]\w/g, c => c.slice(1).toUpperCase())
   }
 
   convertToArrays(
@@ -106,16 +115,21 @@ export class QueryToRecord {
 
   filter(
     columns: string[],
-    query: Record<string, any>
+    query: Record<string, any>,
+    options: QueryToRecordOptions
   ): Record<string, any> {
+    const { camel, capital } = options
     const record = {}
     const extras = {}
 
     for (const col of columns) {
       const value = dotProp.get(query, col)
-      const lastCol = col.match(/[^.]+$/)[0]
+      let lastCol = col.match(/[^.]+$/)[0]
 
       if (value) {
+        lastCol = camel ? this.camelKey(lastCol) : lastCol
+        lastCol = capital ? this.capKey(lastCol) : lastCol
+
         record[lastCol] = value
         dotProp.delete(query, col)
       }
