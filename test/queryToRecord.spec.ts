@@ -6,6 +6,7 @@ const fixture = {
   "Demographic.appVersion": "1.0",
   "user.userAttributes.Gender": "m",
   "user.UserAttributes.source_utm": "onsite",
+  count: 0,
   CreatedAt: new Date().toString(),
   updatedAt: new Date(),
 }
@@ -23,6 +24,7 @@ describe("queryToRecord", () => {
           SourceUtm: "onsite",
         },
       },
+      Count: 0,
       CreatedAt: expect.any(Date),
       UpdatedAt: expect.any(Date),
     })
@@ -34,6 +36,7 @@ describe("queryToRecord", () => {
         camel: true,
         filter: [
           "address",
+          "count",
           "demographic",
           "user.userAttributes.sourceUtm",
           "doesntExist",
@@ -45,6 +48,7 @@ describe("queryToRecord", () => {
         address: "win@sent.com",
         demographic: '{"appVersion":"1.0"}',
         sourceUtm: "onsite",
+        count: 0,
       },
       extras: expect.stringContaining(
         '{"user":{"userAttributes":{"gender":"m"}}'

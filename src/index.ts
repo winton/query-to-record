@@ -126,7 +126,7 @@ export class QueryToRecord {
       const value = dotProp.get(query, col)
       let lastCol = col.match(/[^.]+$/)[0]
 
-      if (value) {
+      if (value !== undefined) {
         lastCol = camel ? this.camelKey(lastCol) : lastCol
         lastCol = capital ? this.capKey(lastCol) : lastCol
 
@@ -136,7 +136,7 @@ export class QueryToRecord {
     }
 
     for (const key in query) {
-      if (!record[key]) {
+      if (record[key] === undefined) {
         extras[key] = query[key]
       }
     }
