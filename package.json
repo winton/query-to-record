@@ -1,6 +1,6 @@
 {
   "name": "query-to-record",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Turns flattened query data into records 🚜",
   "main": "dist/index.js",
   "scripts": {
